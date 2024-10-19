@@ -3,6 +3,7 @@ import { loadModule, HunspellFactory, Hunspell } from 'hunspell-asm';
 import * as fs from 'fs';
 import * as path from 'path';
 import checkSpelling from './utils/checkSpelling';
+import SpellCheckActionProvider from './utils/SpellCheckActionProvider';
 
 export async function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "spell-lint-ko" is now active!');
@@ -27,8 +28,6 @@ export async function activate(context: vscode.ExtensionContext) {
 		const hunspell = hunspellFactory.create(affFile, dicFile);
 
 		const disposable = vscode.commands.registerCommand('spellLintKo.checkSpelling', () => {
-			// The code you place here will be executed every time your command is executed
-			// Display a message box to the user
 			vscode.window.showInformationMessage('Hello World from SpellLint-KO!');
 		});
 	
@@ -44,21 +43,29 @@ export async function activate(context: vscode.ExtensionContext) {
 				checkSpelling({ document: event.document, hunspell, diagnosticCollection });
 			})
 		);
+
+		context.subscriptions.push(
+			vscode.languages.registerCodeActionsProvider(
+				{ scheme: 'file' },
+				new SpellCheckActionProvider(),
+				{
+					providedCodeActionKinds: [vscode.CodeActionKind.QuickFix]
+				}
+			)
+		);
+
+		context.subscriptions.push(
+			vscode.commands.registerCommand('SpellLintKo.skip', (word: string) => {
+				vscode.window.showInformationMessage(`Skip: ${word}`);
+			})
+		);
 		
 
 	} catch (error) {
 		console.log(error, 'error');
 	}
-
-	
-	
-	// checkSpelling({
-	// 	document: 
-	// })
-	// const dictionaryPath = path.join(context.extensionPath, 'dictionaries');
-	// const affPath = path.join(dictionaryPath, 'ko.aff');
-	// const dicPath = path.join(dictionaryPath, 'ko.dic');
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+}
