@@ -68,4 +68,15 @@ You can author your README using Visual Studio Code. Here are some useful editor
 * [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
+## License
+
+This project uses the Korean dictionary files from the hunspell-dict-ko project.
+These dictionary files (ko.aff, ko.dic) are distributed under the GNU General Public License v3.0 (GPL-3.0).
+
+The original hunspell-dict-ko project includes various licenses (MPL 1.1, GPL 2.0, LGPL 2.1, etc.).
+For more details, please refer to the LICENSE.md file.
+
+Dictionary source: https://github.com/spellcheck-ko/hunspell-dict-ko
+
 **Enjoy!**
+

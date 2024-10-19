@@ -3,19 +3,27 @@
   "displayName": "SpellLint-KO",
   "description": "Linting for Korean spelling and conversion to polite (-yo) form",
   "version": "0.0.1",
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "publisher": "Jeong-jeong",
   "engines": {
-    "vscode": "^1.94.0"
+    "vscode": "^1.89.0"
   },
   "categories": [
-    "Other"
+    "Linters"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:plaintext"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "spell-lint-ko.helloWorld",
-        "title": "Hello World"
+        "command": "spellLintKo.checkSpelling",
+        "title": "Check Korean Spelling"
       }
     ]
   },
@@ -45,5 +53,8 @@
     "eslint": "^9.11.1",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "hunspell-asm": "^4.0.2"
   }
 }
