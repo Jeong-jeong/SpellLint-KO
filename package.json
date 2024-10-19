@@ -4,11 +4,28 @@
   "description": "Linting for Korean spelling and conversion to polite (-yo) form",
   "version": "0.0.1",
   "license": "GPL-3.0-only",
+  "homepage": "https://github.com/Jeong-jeong",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git@github.com:Jeong-jeong/SpellLint-KO.git"
   },
-  "publisher": "Jeong-jeong",
+  "author": "Jeong-jeong <kimm.jeongs@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/Jeong-jeong/SpellLint-KO/issues"
+  },
+  "keywords": [
+    "spell",
+    "lint",
+    "korean",
+    "ko",
+    "hunspell",
+    "language",
+    "한국어",
+    "한글",
+    "맞춤법",
+    "문법",
+    "해요체"
+  ],
   "engines": {
     "vscode": "^1.89.0"
   },
