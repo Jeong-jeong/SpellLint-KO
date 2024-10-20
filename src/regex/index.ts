@@ -1,0 +1,1 @@
+export const KOREAN_WORD_PATTERN = /[가-힣]+([0-9a-zA-Z]*[가-힣]+)*/g;

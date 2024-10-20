@@ -8,9 +8,7 @@ class SpellCheckActionProvider implements vscode.CodeActionProvider {
     token: vscode.CancellationToken
   ): vscode.CodeAction[] {
     const actions: vscode.CodeAction[] = [];
-    console.log(context.diagnostics, 'context.diagnostics');
     for (const diagnostic of context.diagnostics) {
-      console.log(diagnostic, 'diagnostic');
       if (diagnostic.source !== 'SpellLint-KO' ) {
         continue;
       }
