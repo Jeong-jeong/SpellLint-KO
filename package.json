@@ -39,7 +39,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "spellLintKo.checkSpelling",
+        "command": "SpellLint-KO.checkSpelling",
         "title": "Check Korean Spelling"
       }
     ]
@@ -61,21 +61,23 @@
     "test:mocha": "pnpm run compile-tests && pnpm run mocha-test"
   },
   "devDependencies": {
-  "@types/chai": "4.3.3",
-  "@types/mocha": "^10.0.8",
-  "@types/node": "20.x",
-  "@types/vscode": "^1.94.0",
-  "@typescript-eslint/eslint-plugin": "^8.7.0",
-  "@typescript-eslint/parser": "^8.7.0",
-  "@vscode/test-cli": "^0.0.10",
-  "@vscode/test-electron": "^2.4.1",
-  "chai": "4.5.10",
-  "esbuild": "^0.24.0",
-  "eslint": "^9.11.1",
-  "mocha": "^10.7.3",
-  "npm-run-all": "^4.1.5",
-  "ts-node": "^10.9.2",
-  "typescript": "^5.6.3"
+    "sinon": "17.0.1",  
+    "@types/sinon": "17.0.3",
+    "@types/chai": "4.3.3",
+    "@types/mocha": "^10.0.8",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.94.0",
+    "@typescript-eslint/eslint-plugin": "^8.7.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "chai": "4.5.0",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.11.1",
+    "mocha": "^10.7.3",
+    "npm-run-all": "^4.1.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
   },
   "dependencies": {
     "hunspell-asm": "^4.0.2"

@@ -1,4 +1,4 @@
-# spell-lint-ko README
+# SpellLint-KO README
 
 This is the README for your extension "spell-lint-ko". After writing up a brief description, we recommend including the following sections.
 
