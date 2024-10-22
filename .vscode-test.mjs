@@ -5,5 +5,5 @@ export default defineConfig({
 	mocha: {
 		ui: 'bdd',
 		timeout: 10000,
-	}
+	},
 });

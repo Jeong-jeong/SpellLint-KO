@@ -1,4 +1,6 @@
 const esbuild = require("esbuild");
+const fs = require('fs-extra');
+const path = require('path');
 
 const production = process.argv.includes('--production');
 const watch = process.argv.includes('--watch');
@@ -23,6 +25,29 @@ const esbuildProblemMatcherPlugin = {
 	},
 };
 
+const copyTextFixturesPlugin = {
+	name: 'copy-text-fixtures',
+
+	setup(build) {
+		build.onStart(() => {
+			// out에 text-fixtures 폴더 생성
+			fs.ensureDirSync('out/test/test-fixtures');
+
+			const files = fs.readdirSync('test/test-fixtures');
+			files.forEach((file) => {
+				if (file.endsWith('.txt')) {
+					fs.copyFileSync(
+						path.join('test/test-fixtures', file),
+						path.join('out/test/test-fixtures', file)
+					);
+				}
+			});
+		});
+
+		console.log('[copy] test fixtures copied');
+	},
+};
+
 async function main() {
 	const ctx = await esbuild.context({
 		entryPoints: [
@@ -39,6 +64,7 @@ async function main() {
 		logLevel: 'silent',
 		plugins: [
 			esbuildProblemMatcherPlugin,
+			copyTextFixturesPlugin,
 		],
 	});
 	if (watch) {
