@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { DISPLAY_NAME, SKIP_COMMAND } from '../constants/command';
 
 class SpellCheckActionProvider implements vscode.CodeActionProvider {
   public provideCodeActions(
@@ -9,7 +10,7 @@ class SpellCheckActionProvider implements vscode.CodeActionProvider {
   ): vscode.CodeAction[] {
     const actions: vscode.CodeAction[] = [];
     for (const diagnostic of context.diagnostics) {
-      if (diagnostic.source !== 'SpellLint-KO' ) {
+      if (diagnostic.source !== DISPLAY_NAME ) {
         continue;
       }
 
@@ -27,7 +28,7 @@ class SpellCheckActionProvider implements vscode.CodeActionProvider {
       const skipAction = new vscode.CodeAction('건너뛰기', vscode.CodeActionKind.QuickFix);
       skipAction.command = {
         title: '건너뛰기',
-        command: 'SpellLintKo.skip',
+        command: SKIP_COMMAND,
         arguments: [word]
       };
       actions.push(skipAction);

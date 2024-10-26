@@ -29,7 +29,7 @@ describe('getDiagnostic', () => {
       match,
       lineIndex,
       documentUri: mockDocumentUri,
-      hunspell: mockHunspell
+      hunspell: mockHunspell,
     });
 
     expect(result?.message).to.equal('맞춤법 오류: 맛춤뻡');
@@ -45,10 +45,9 @@ describe('getDiagnostic', () => {
       match,
       lineIndex,
       documentUri: mockDocumentUri,
-      hunspell: mockHunspell
+      hunspell: mockHunspell,
     });
 
     expect(result).to.be.null;
   });
-
 });

@@ -7,9 +7,10 @@ interface CheckSpellingProps {
   document: vscode.TextDocument;
   hunspell: Hunspell;
   diagnosticCollection: vscode.DiagnosticCollection;
+  globalState?: vscode.ExtensionContext['globalState'];
 }
 
-const checkSpelling = ({ document, hunspell, diagnosticCollection }: CheckSpellingProps) => {
+const checkSpelling = ({ document, hunspell, diagnosticCollection, globalState }: CheckSpellingProps) => {
   const text = document.getText();
   const diagnostics: vscode.Diagnostic[] = [];
   const lines = text.split('\n');
@@ -18,7 +19,13 @@ const checkSpelling = ({ document, hunspell, diagnosticCollection }: CheckSpelli
     const matches = getMatchKoreanWords(line);
     
     matches.forEach((match) => {
-      const diagnostic = getDiagnostic({ match, lineIndex, documentUri: document.uri, hunspell });
+      const diagnostic = getDiagnostic({
+        match,
+        lineIndex,
+        documentUri: document.uri,
+        hunspell,
+        globalState,
+      });
 
       if (diagnostic) {
         diagnostics.push(diagnostic);
