@@ -27,13 +27,27 @@ export async function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(disposable);
 	
 		context.subscriptions.push(
-			vscode.workspace.onDidOpenTextDocument((document) => {
-				checkSpelling({ document, hunspell, diagnosticCollection, globalState });
+			vscode.workspace.onDidOpenTextDocument(async (document) => {
+				vscode.window.onDidChangeActiveTextEditor((editor) => {
+					if (editor?.document === document) {
+						checkSpelling({
+							document,
+							hunspell,
+							diagnosticCollection,
+							globalState,
+						});
+					}
+				});
 			})
 		);
 		context.subscriptions.push(
 			vscode.workspace.onDidSaveTextDocument((document) => {
-				checkSpelling({ document, hunspell, diagnosticCollection, globalState });
+				checkSpelling({
+					document,
+					hunspell,
+					diagnosticCollection,
+					globalState
+				});
 			})
 		);
 

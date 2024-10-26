@@ -1,7 +1,9 @@
 import { Hunspell } from 'hunspell-asm';
 import * as vscode from 'vscode';
-import getMatchKoreanWords from './getMatchKoreanWords';
 import getDiagnostic from './getDiagnostic';
+import * as hanspell from 'hanspell';
+import getPreprocessedWord from './getPreprocessedWord';
+import { isSkipWord } from './userDictionary';
 
 interface CheckSpellingProps {
   document: vscode.TextDocument;
@@ -10,28 +12,48 @@ interface CheckSpellingProps {
   globalState?: vscode.ExtensionContext['globalState'];
 }
 
-const checkSpelling = ({ document, hunspell, diagnosticCollection, globalState }: CheckSpellingProps) => {
+const checkSpelling = async ({ document, hunspell, diagnosticCollection, globalState }: CheckSpellingProps) => {
   const text = document.getText();
   const diagnostics: vscode.Diagnostic[] = [];
   const lines = text.split('\n');
 
-  lines.forEach((line, lineIndex) => {
-    const matches = getMatchKoreanWords(line);
-    
-    matches.forEach((match) => {
-      const diagnostic = getDiagnostic({
-        match,
-        lineIndex,
-        documentUri: document.uri,
-        hunspell,
-        globalState,
-      });
+  for (const [lineIndex, line] of lines.entries()) {
+    const koreanSentences = line.match(/([가-힣]+[^\n]*[.!?]?)/g);
+    if (!koreanSentences) {
+      continue;
+    }
 
-      if (diagnostic) {
-        diagnostics.push(diagnostic);
+    for (const koreanSentence of koreanSentences) {
+      const word = koreanSentence.split(' ').find((word) => word.trim().length > 0 && getPreprocessedWord(word));
+
+      if (word) {
+        if (!word.length || isSkipWord(word, globalState) || hunspell.spell(word)) {
+          continue;
+        }
+
+        try {
+          const responseArray = await new Promise<HanspellResponse[]>((resolve, reject) => {
+            hanspell.spellCheckByDAUM(koreanSentence, 6000, resolve, console.log, reject);
+          });
+  
+          responseArray.forEach((response) => {
+            const diagnostic = getDiagnostic({
+              line,
+              response,
+              lineIndex: lineIndex,
+              documentUri: document.uri,
+            });
+    
+            if (diagnostic) {
+              diagnostics.push(diagnostic);
+            }
+          });
+        } catch (error) {
+          console.error(error);
+        }
       }
-    });
-  });
+    };
+  }
 
   diagnosticCollection.set(document.uri, diagnostics);
 };
