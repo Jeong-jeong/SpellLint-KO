@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DISPLAY_NAME, SKIP_COMMAND } from '../constants/command';
+import { DIAGNOSTIC_SPELL_SUGGESTION_CODE, DISPLAY_NAME, SKIP_COMMAND } from '../constants/command';
 
 class SpellCheckActionProvider implements vscode.CodeActionProvider {
   public provideCodeActions(
@@ -15,7 +15,14 @@ class SpellCheckActionProvider implements vscode.CodeActionProvider {
       }
 
       const word = document.getText(diagnostic.range);
-      const suggestions = diagnostic.relatedInformation?.[0].message.replace('제안: ', '').split(', ') || [];
+      let suggestions: string[] = [];
+      try {
+        if (typeof diagnostic.code === 'object' && diagnostic.code.value === DIAGNOSTIC_SPELL_SUGGESTION_CODE) {
+          suggestions = JSON.parse(diagnostic.code?.target.path.replace('/', ''));
+        }
+      } catch (error) {
+        console.error(error);
+      };
 
       for (const suggestion of suggestions) {
         const action = new vscode.CodeAction(`"${suggestion}"(으)로 바꾸기`, vscode.CodeActionKind.QuickFix);

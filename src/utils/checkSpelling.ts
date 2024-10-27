@@ -33,7 +33,7 @@ const checkSpelling = async ({ document, hunspell, diagnosticCollection, globalS
 
         try {
           const responseArray = await new Promise<HanspellResponse[]>((resolve, reject) => {
-            hanspell.spellCheckByDAUM(koreanSentence, 6000, resolve, console.log, reject);
+            hanspell.spellCheckByPNU(koreanSentence, 6000, resolve, console.log, reject);
           });
   
           responseArray.forEach((response) => {
@@ -42,6 +42,7 @@ const checkSpelling = async ({ document, hunspell, diagnosticCollection, globalS
               response,
               lineIndex: lineIndex,
               documentUri: document.uri,
+              severity: vscode.DiagnosticSeverity.Warning,
             });
     
             if (diagnostic) {
@@ -49,6 +50,21 @@ const checkSpelling = async ({ document, hunspell, diagnosticCollection, globalS
             }
           });
         } catch (error) {
+          const suggestions = hunspell.suggest(word);
+          const diagnostic = getDiagnostic({
+            line,
+            response: {
+              token: word,
+              suggestions,
+            },
+            lineIndex: lineIndex,
+            documentUri: document.uri,
+            severity: vscode.DiagnosticSeverity.Information
+          });
+
+          if (diagnostic) {
+            diagnostics.push(diagnostic);
+          }
           console.error(error);
         }
       }

@@ -28,21 +28,17 @@ export async function activate(context: vscode.ExtensionContext) {
 	
 		context.subscriptions.push(
 			vscode.workspace.onDidOpenTextDocument(async (document) => {
-				vscode.window.onDidChangeActiveTextEditor((editor) => {
-					if (editor?.document === document) {
-						checkSpelling({
-							document,
-							hunspell,
-							diagnosticCollection,
-							globalState,
-						});
-					}
+				await checkSpelling({
+					document,
+					hunspell,
+					diagnosticCollection,
+					globalState,
 				});
 			})
 		);
 		context.subscriptions.push(
-			vscode.workspace.onDidSaveTextDocument((document) => {
-				checkSpelling({
+			vscode.workspace.onDidSaveTextDocument(async (document) => {
+				await checkSpelling({
 					document,
 					hunspell,
 					diagnosticCollection,
@@ -65,17 +61,15 @@ export async function activate(context: vscode.ExtensionContext) {
 			vscode.commands.registerCommand(SKIP_COMMAND, async (word: string) => {
 				await userDictionary.addSkipWord({ globalState, word, hunspell });
 				const editor = vscode.window.activeTextEditor;
-				setTimeout(() => {
-					if (editor) {
-						checkSpelling({
-							document: editor.document,
-							hunspell,
-							diagnosticCollection,
-							globalState,
-						});
-					}
-					vscode.window.showInformationMessage(`"${word}"(을)를 스킵 목록에 추가했어요.)`);
-				}, 100);
+				if (editor) {
+					await checkSpelling({
+						document: editor.document,
+						hunspell,
+						diagnosticCollection,
+						globalState,
+					});
+				}
+				vscode.window.showInformationMessage(`"${word}"(을)를 스킵 목록에 추가했어요.)`);
 			})
 		);
 		
