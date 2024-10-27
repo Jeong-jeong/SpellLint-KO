@@ -4,6 +4,7 @@ import getDiagnostic from './getDiagnostic';
 import * as hanspell from 'hanspell';
 import getPreprocessedWord from './getPreprocessedWord';
 import { isSkipWord } from './userDictionary';
+import checkBeginsWithKorean from './checkBeginsWithKorean';
 
 interface CheckSpellingProps {
   document: vscode.TextDocument;
@@ -18,7 +19,7 @@ const checkSpelling = async ({ document, hunspell, diagnosticCollection, globalS
   const lines = text.split('\n');
 
   for (const [lineIndex, line] of lines.entries()) {
-    const koreanSentences = line.match(/([가-힣]+[^\n]*[.!?]?)/g);
+    const koreanSentences = checkBeginsWithKorean(line);
     if (!koreanSentences) {
       continue;
     }

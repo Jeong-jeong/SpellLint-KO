@@ -17,8 +17,8 @@ declare module 'hanspell' {
 }
 
 interface HanspellResponse {
-  type: string; // space
   token: string;
+  info: string;
   suggestions: string[];
   context: string;
 }
